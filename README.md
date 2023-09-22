@@ -10,10 +10,12 @@ TODO
 3. Click the create button 
 
 ![alt text](Resources/new_resource.PNG?raw=true)
+
 4. Search for and select "Web App"
 5. Click create
 
 ![alt text](Resources/new_app.PNG?raw=true)
+
 6. In the basics section fill in these values:
 - Name: The website name (must be unique)
 - Runtime stack: The runtime you are using
@@ -25,3 +27,9 @@ TODO
 10. Select yourself as Organization, and select repo and branch
 11. Click "review and create"
 12. Check the details and click create
+
+## Verify app has been deployed
+TODO
+
+## Add test step to pipeline
+TODO
