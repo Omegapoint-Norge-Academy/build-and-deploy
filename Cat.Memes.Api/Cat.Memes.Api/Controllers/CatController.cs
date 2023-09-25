@@ -8,15 +8,22 @@ namespace Cat.Memes.Api.Controllers;
 public class CatController : ControllerBase
 {
     private readonly ICatMemeService _catMemeService;
+    private readonly IConfiguration _configuration;
 
-    public CatController(ICatMemeService catMemeService)
+    public CatController(ICatMemeService catMemeService, IConfiguration configuration)
     {
         _catMemeService = catMemeService;
+        _configuration = configuration;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(_catMemeService.GetCatMemes());
+        var catMemes = _catMemeService.GetCatMemes();
+        foreach (var catMeme in catMemes)
+        {
+            catMeme.Secret = _configuration["TestSecret"];
+        }
+        return Ok(catMemes);
     }
 }
