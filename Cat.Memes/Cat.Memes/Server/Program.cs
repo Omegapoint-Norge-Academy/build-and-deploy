@@ -1,6 +1,14 @@
+using Azure.Identity;
 using Cat.Memes.Server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+if (builder.Environment.IsProduction())
+{
+    builder.Configuration.AddAzureKeyVault(
+        new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
+        new DefaultAzureCredential());
+}
 
 // Add services to the container.
 
@@ -9,7 +17,10 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddHttpClient<ICatMemeService, CatMemeService>(client =>
 {
-    client.BaseAddress = new Uri(builder.Configuration["CatMemeApiUrl"] ?? throw new InvalidOperationException());
+    client.BaseAddress = new Uri(builder.Configuration["CatMemeApi:Url"] ?? throw new InvalidOperationException());
+    var authenticationString = $"{builder.Configuration["CatMemeApi:Username"]}:{builder.Configuration["CatMemeApi:Password"]}";
+    var base64EncodedAuthenticationString = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(authenticationString));
+    client.DefaultRequestHeaders.Add("Authorization", "Basic " + base64EncodedAuthenticationString);
 });
 
 var app = builder.Build();
