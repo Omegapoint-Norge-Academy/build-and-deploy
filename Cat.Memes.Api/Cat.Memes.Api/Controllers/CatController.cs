@@ -1,9 +1,11 @@
 using Cat.Memes.Api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cat.Memes.Api.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("[controller]")]
 public class CatController : ControllerBase
 {
