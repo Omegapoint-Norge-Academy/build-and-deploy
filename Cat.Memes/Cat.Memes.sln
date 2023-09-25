@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cat.Memes.Client", "Cat.Mem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cat.Memes.Shared", "Cat.Memes\Shared\Cat.Memes.Shared.csproj", "{B07A9DB4-A925-47AC-8CDF-F9A94409AFEB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cat.Memes.Server.Tests", "Cat.Memes.Server.Tests\Cat.Memes.Server.Tests.csproj", "{933D8B6B-59EE-4A79-B24D-373834952421}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{B07A9DB4-A925-47AC-8CDF-F9A94409AFEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B07A9DB4-A925-47AC-8CDF-F9A94409AFEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B07A9DB4-A925-47AC-8CDF-F9A94409AFEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{933D8B6B-59EE-4A79-B24D-373834952421}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933D8B6B-59EE-4A79-B24D-373834952421}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933D8B6B-59EE-4A79-B24D-373834952421}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933D8B6B-59EE-4A79-B24D-373834952421}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

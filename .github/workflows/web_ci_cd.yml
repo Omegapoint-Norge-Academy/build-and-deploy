@@ -25,6 +25,9 @@ jobs:
       - name: Build with dotnet
         run: dotnet build Cat.Memes/Cat.Memes/Server/Cat.Memes.Server.csproj --configuration Release
 
+      - name: Test with the dotnet CLI
+        run: dotnet test
+
       - name: dotnet publish
         run: dotnet publish Cat.Memes/Cat.Memes/Server/Cat.Memes.Server.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
