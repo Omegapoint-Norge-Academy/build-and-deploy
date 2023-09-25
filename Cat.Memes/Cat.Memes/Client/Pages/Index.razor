@@ -1,9 +1,35 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@using Cat.Memes.Shared
 
-<h1>Hello, world!</h1>
+@inject HttpClient _client
 
-Welcome to your new app.
+<PageTitle>Cet memes</PageTitle>
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+@if (_catMemes is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        @foreach (var catMeme in _catMemes)
+        {
+            <div>
+                <img src="@catMeme.Image"
+                     width="500px"
+                     alt="A cat meme"/>
+            </div>
+        }
+    </div>
+}
+
+@code
+{
+    private List<CatMeme>? _catMemes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _catMemes = await _client.GetFromJsonAsync<List<CatMeme>>("cat");
+    }
+}
