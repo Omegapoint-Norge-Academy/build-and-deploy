@@ -28,8 +28,14 @@ TODO
 11. Click "review and create"
 12. Check the details and click create
 
+## Configure workflow
+TODO
+
 ## Verify app has been deployed
 TODO
 
-## Add test step to pipeline
+## Add key vault
+TODO
+
+## Add tests to workflow
 TODO
