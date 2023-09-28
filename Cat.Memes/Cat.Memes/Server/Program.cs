@@ -5,14 +5,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 if (builder.Environment.IsProduction())
 {
-    builder.Configuration.AddAzureKeyVault(
-        new Uri($"https://{builder.Configuration["KeyVaultName"]}.vault.azure.net/"),
-        new DefaultAzureCredential());
-
     builder.Configuration.AddAzureAppConfiguration(options =>
-        options.Connect(
-            new Uri(builder.Configuration["AppConfigEndpoint"] ?? throw new InvalidOperationException()),
-            new DefaultAzureCredential()));
+    {
+        options.Connect(builder.Configuration["AppConfigEndpoint"])
+            .ConfigureKeyVault(kv =>
+            {
+                kv.SetCredential(new DefaultAzureCredential());
+            });
+    });
 }
 
 
