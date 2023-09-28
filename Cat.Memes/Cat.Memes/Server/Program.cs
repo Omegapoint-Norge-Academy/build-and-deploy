@@ -7,7 +7,9 @@ if (builder.Environment.IsProduction())
 {
     builder.Configuration.AddAzureAppConfiguration(options =>
     {
-        options.Connect(builder.Configuration["AppConfigEndpoint"])
+        options.Connect(
+                new Uri(builder.Configuration["AppConfigEndpoint"] ?? throw new InvalidOperationException()),
+                new DefaultAzureCredential())
             .ConfigureKeyVault(kv =>
             {
                 kv.SetCredential(new DefaultAzureCredential());
