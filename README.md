@@ -1,3 +1,20 @@
+- [Build and Deploy](#build-and-deploy)
+- [Workshop](#workshop)
+    * [Fork the template repo to your personal GitHub](#fork-the-template-repo-to-your-personal-github)
+    * [Create a web app](#create-a-web-app)
+    * [Verify app has been deployed](#verify-app-has-been-deployed)
+    * [Add app configuration and secrets](#add-app-configuration-and-secrets)
+        + [Clone the repo](#clone-the-repo)
+        + [Add configuration provider in code](#add-configuration-provider-in-code)
+        + [Add a managed identity in Azure](#add-a-managed-identity-in-azure)
+    * [Add tests to workflow](#add-tests-to-workflow)
+- [For the workshop organizer](#for-the-workshop-organizer)
+    * [Web App: APP-BD-CatMemeAPI and APP-BD-CatMemeWeb](#web-app--app-bd-catmemeapi-and-app-bd-catmemeweb)
+    * [Key vault: APP-BD-KeyVault](#key-vault--app-bd-keyvault)
+    * [App config: APP-BD-AppConfig](#app-config--app-bd-appconfig)
+    * [Access for workshop participants](#access-for-workshop-participants)
+
+
 # Build and Deploy
 Course material for build and deploy
 
@@ -12,9 +29,8 @@ Course material for build and deploy
 
 ![alt text](Resources/fork-2.PNG?raw=true)
 
-
 ## Create a web app
-1. Goto https://portal.azure.com and login with your Omegapoint account
+1. Go to https://portal.azure.com and login with your Omegapoint account
 2. Go to the resource group "APP-Build-and-Deploy" https://portal.azure.com/#@itverket.no/resource/subscriptions/d6d57ee0-64af-4adc-b5cc-44e24edcdb53/resourceGroups/APP-Build-and-Deploy/overview
 3. Click the create button 
 
@@ -90,11 +106,11 @@ We haven't configured a managed identity in Azure for our web App. Lets do that 
 ### Add a managed identity in Azure
 In this step we want to add a managed identity to our web app and assign access for that identity to `Application Configuration` and `Key Vault`
 
-1. Goto you web app and turn on `Identity`. Click `Yes` in the popup window. This will assign a managed identity to your application 
+1. Go to you web app and turn on `Identity`. Click `Yes` in the popup window. This will assign a managed identity to your application 
 
 ![alt text](Resources/managed-identity-web-app.PNG?raw=true)
 
-2. Goto the `APP-BD-AppConfig` resource in Azure and select `Access control (IAM)` and click `Add` -> `Add role assignment`
+2. Go to the `APP-BD-AppConfig` resource in Azure and select `Access control (IAM)` and click `Add` -> `Add role assignment`
 
 ![alt text](Resources/app-config-access.PNG?raw=true)
 
@@ -108,5 +124,50 @@ In this step we want to add a managed identity to our web app and assign access 
 
 5. Click `Next` and `Review + Assign`
 6. Do the exact same thing for `APP-BD-KeyVault`, but this time, assign the `Key Vault Secrets User` role to your web app
+
 ## Add tests to workflow
-TODO
+Now we want to automate the running of our tests in our workflow. We don't want to deploy anything that fails our tests.
+
+1. Go to the `.github\workflows` folder in your repo.
+2. Open the workflow file and add the following step between build and publish
+``` yaml
+      - name: Test with the dotnet CLI
+        run: dotnet test Cat.Memes.sln
+```
+3. Commit and push your changes
+4. You should now be able to observe the tests running in the workflow
+
+# For the workshop organizer
+To prepare the workshop create the following in Azure
+- Resource group named `APP-Build-and-Deploy`
+- App Service Plan named `APP-BD-Plan` with pricing tier S1
+- Key vault named `APP-BD-KeyVault`
+- App Configuration named `APP-BD-AppConfig`
+- Web App named `APP-BD-CatMemeAPI`
+- Web App named `APP-BD-CatMemeWeb`
+
+## Web App: APP-BD-CatMemeAPI and APP-BD-CatMemeWeb
+Assign managed identities and deploy the applications from GitHub actions
+
+## Key vault: APP-BD-KeyVault
+Add these secrets to Key Vault
+- `ApiPassword` with a random value
+
+Assign the role `Key Vault Secrets User` to `APP-BD-CatMemeAPI` and `APP-BD-CatMemeWeb`
+
+## App config: APP-BD-AppConfig
+Add the following to the configuration
+- `ApiUrl` that points at the url for `APP-BD-CatMemeAPI`
+- `ApiUser` with value `admin`
+- A key vault reference named `ApiPassword` that references `ApiPassword` in `APP-BD-KeyVault`
+
+Assign the role `App Configuration Data Reader` to `APP-BD-CatMemeAPI` and `APP-BD-CatMemeWeb`
+
+## Access for workshop participants
+- Assign the role `Website Contributor` to the resource group `APP-Build-and-Deploy`
+- Assign the role `User Access Administrator` to the key vault `APP-BD-KeyVault`. Add a condition that only allows
+the users to edit the role `Key Vault Secrets User`. Go to advanced and remove the condition that allows the users
+to delete the role. This way they can only add and update `Key Vault Secrets User`
+- Assign the role `User Access Administrator` to the key vault `APP-BD-AppConfig`. Add a condition that only allows
+  the users to edit the role `App Configuration Data Reader`. Go to advanced and remove the condition that allows the users
+  to delete the role. This way they can only add and update `App Configuration Data Reader`
