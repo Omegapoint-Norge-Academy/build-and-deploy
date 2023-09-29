@@ -3,8 +3,6 @@ name: CatMemeWeb PR Validation
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - Cat.Memes
 
 jobs:
   build:
@@ -20,7 +18,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build Cat.Memes/Cat.Memes/Server/Cat.Memes.Server.csproj --configuration Release
+        run: dotnet build Cat.Memes/Cat.Memes.sln --configuration Release
 
       - name: Test with the dotnet CLI
         run: dotnet test Cat.Memes/Cat.Memes.sln
