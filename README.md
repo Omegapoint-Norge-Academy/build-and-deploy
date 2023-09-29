@@ -42,22 +42,71 @@ Course material for build and deploy
 13. Click "review and create"
 14. Check the details and click create
 
-## Configure workflow
-1. Go to your personal github and select the "cat-meme-web" repo
-2. Go to the "Actions" tab
-3. Clone the repo to your computer
+Azure will create a GitHub Action for you as wall as a webapp. Go to your personal github and select the "cat-meme-web" repo an go to Actions to view the deploy
+
+## Verify app has been deployed
+Open the app by clicking "Browse"
+
+![alt text](Resources/created-web-app.PNG?raw=true)
+
+## Add app configuration and secrets
+### Clone the repo
+For the app to work, we need to access configuration and secrets.
+
+First, clone the repository and open the solution in an editor of choice (Visual studio/Visual studio code/Rider)
 
 ![alt text](Resources/fork-clone.PNG?raw=true)
 
 ![alt text](Resources/fork-clone-2.PNG?raw=true)
 
-4. Open the project in an editor of choise (Visual studio/Visual studio code/Rider)
-5. 
-## Verify app has been deployed
-TODO
+### Add configuration provider in code
+When you have opened the project, install the following nuget packages to Cat.Meme.Server
+```
+Microsoft.Azure.AppConfiguration.AspNetCore
+Azure.Identity
+```
+Add this code to the `Program.cs` file in the Cat.Memes.Server project. Add it inside the if sentence `if (builder.Environment.IsProduction())` 
 
-## Add key vault
-TODO
+``` csharp
+builder.Configuration.AddAzureAppConfiguration(options => 
+        options.Connect(
+            new Uri(builder.Configuration["AppConfigEndpoint"] ?? throw new InvalidOperationException()),
+            new ManagedIdentityCredential())
+        .ConfigureKeyVault(kv =>
+        {
+            kv.SetCredential(new ManagedIdentityCredential());
+        }));
+```
 
+This code adds Azure App Configuration as a configuration provider for this application. The uri is the address the
+Azure App Configuration is hosted at. Also we provide a Managed Identity. This is an identity managed in Azure.
+More about managed identities [here](https://learn.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview)
+
+We also add a Key Vault credentials for the app configuration. This enables us to get any secrets stored in Azure Key Vault that
+our App Configuration references. More about configuring this [here](https://learn.microsoft.com/en-us/samples/azure/azure-sdk-for-net/app-secrets-configuration/?tabs=visualstudio)
+
+We haven't configured a managed identity in Azure for our web App. Lets do that now.
+
+### Add a managed identity in Azure
+In this step we want to add a managed identity to our web app and assign access for that identity to `Application Configuration` and `Key Vault`
+
+1. Goto you web app and turn on `Identity`. Click `Yes` in the popup window. This will assign a managed identity to your application 
+
+![alt text](Resources/managed-identity-web-app.PNG?raw=true)
+
+2. Goto the `APP-BD-AppConfig` resource in Azure and select `Access control (IAM)` and click `Add` -> `Add role assignment`
+
+![alt text](Resources/app-config-access.PNG?raw=true)
+
+3. Select the `App Configuration Data Reader` and click `Next`
+
+![alt text](Resources/app-config-access-2.PNG?raw=true)
+
+4. Select `Managed identity` abd select your web app from the list.
+
+![alt text](Resources/app-config-access-3.PNG?raw=true)
+
+5. Click `Next` and `Review + Assign`
+6. Do the exact same thing for `APP-BD-KeyVault`, but this time, assign the `Key Vault Secrets User` role to your web app
 ## Add tests to workflow
 TODO
