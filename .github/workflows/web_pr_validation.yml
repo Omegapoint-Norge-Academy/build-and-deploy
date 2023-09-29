@@ -3,8 +3,8 @@ name: CatMemeWeb PR Validation
 on:
   pull_request:
     branches: [ main ]
-    paths:
-      - Cat.Memes
+#    paths:
+#      - Cat.Memes
 
 jobs:
   build:
