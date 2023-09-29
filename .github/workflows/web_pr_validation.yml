@@ -1,0 +1,26 @@
+name: CatMemeWeb PR Validation
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - Cat.Memes
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build Cat.Memes/Cat.Memes/Server/Cat.Memes.Server.csproj --configuration Release
+
+      - name: Test with the dotnet CLI
+        run: dotnet test Cat.Memes/Cat.Memes.sln
