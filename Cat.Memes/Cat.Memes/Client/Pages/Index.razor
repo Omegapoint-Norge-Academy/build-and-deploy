@@ -10,6 +10,10 @@
 {
     <p>Loading...</p>
 }
+else if (_catMemes.Count is 0)
+{
+    <p>Could not fetch data from API</p>
+}
 else
 {
     <div style="display: flex; flex-direction: column; gap: 1rem;">

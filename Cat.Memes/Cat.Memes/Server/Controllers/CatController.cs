@@ -1,5 +1,4 @@
 using Cat.Memes.Server.Services;
-using Cat.Memes.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cat.Memes.Server.Controllers

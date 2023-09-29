@@ -11,8 +11,15 @@ public class CatMemeService : ICatMemeService
         _client = client;
     }
 
-    public Task<List<CatMeme>> GetCatMemes()
+    public async Task<List<CatMeme>> GetCatMemes()
     {
-        return _client.GetFromJsonAsync<List<CatMeme>>("Cat")!;
+        try
+        {
+            return await _client.GetFromJsonAsync<List<CatMeme>>("Cat") ?? new List<CatMeme>();
+        }
+        catch (Exception)
+        {
+            return new List<CatMeme>();
+        }
     }
 }
