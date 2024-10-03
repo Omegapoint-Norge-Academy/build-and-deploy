@@ -61,9 +61,9 @@ https://portal.azure.com/#@itverket.no/resource/subscriptions/d6d57ee0-64af-4adc
 6. In the basics section fill in these values:
 - **Name:** The website name (must be unique). Please include your personal name in the name to avoid confusion
 (e.g. "eivind-cat-meme-web")
-- **Runtime stack:** .NET 7 (STS)
+- **Runtime stack:** .NET 8 (LTS)
 - **Operating system:** Windows
-- **Region:** West Europe
+- **Region:** Norway East (depends on what the instructor has choosen for the app service plan)
 - **Windows plan:** APP-BD-Plan (S1)
 
 7. Click on `Next: Deployment` at the bottom of the page
